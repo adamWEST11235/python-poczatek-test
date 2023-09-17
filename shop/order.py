@@ -11,12 +11,12 @@ class Order:
         self.client_last_name = client_last_name
         if order_elements is None:
             order_elements = []
-        self.order_elements = order_elements
-        self.total_price = self.calculate_total_price()
+        self._order_elements = order_elements
+        self.total_price = self._calculate_total_price()
 
-    def calculate_total_price(self):
+    def _calculate_total_price(self):
         total_price = 0
-        for element in self.order_elements:
+        for element in self._order_elements:
             total_price += element.calculate_price()
         return total_price
 
@@ -24,14 +24,14 @@ class Order:
         if self.__class__ != other.__class__:
             return NotImplemented
 
-        if len(self.order_elements) != len(other.order_elements):
+        if len(self._order_elements) != len(other._order_elements):
             return False
 
         if self.client_first_name != other.client_first_name or self.client_last_name != other.client_last_name:
             return False
 
-        for order_element in self.order_elements:
-            if order_element not in other.order_elements:
+        for order_element in self._order_elements:
+            if order_element not in other._order_elements:
                 return False
         return True
 
@@ -40,15 +40,18 @@ class Order:
         order_details = f"Zamówienie złożone przez: {self.client_first_name} {self.client_last_name}"
         value_details = f"O łącznej wartości: {self.total_price} PLN"
         product_details = "Zamówione produkty:\n"
-        for element in self.order_elements:
+        for element in self._order_elements:
             product_details += f"\t{element}\n"
 
         result = "\n".join([mark_line, order_details, value_details, product_details, mark_line])
         return result
 
     def __len__(self):
-        return len(self.order_elements)
+        return len(self._order_elements)
 
+    def add_new_product(self, product, quantity):
+        self._order_elements.append(OrderElement(product, quantity))
+        self.total_price = self._calculate_total_price()
 
 def generate_order():
     number_of_product = random.randint(1, 10)
