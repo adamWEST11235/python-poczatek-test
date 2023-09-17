@@ -2,6 +2,7 @@
 from shop.order import Order
 from shop.order_element import OrderElement
 from shop.product import Product
+from tax_calculator import TaxCalculator
 
 
 def run_homework():
@@ -20,16 +21,15 @@ def run_homework():
     second_order_elements = [
         OrderElement(product=juice, quantity=4),
         OrderElement(product=cookie, quantity=3),
+        OrderElement(product=juice, quantity=4),
+        # OrderElement(product=cookie, quantity=3),
+        # OrderElement(product=juice, quantity=4),
+        # OrderElement(product=cookie, quantity=3)
     ]
+    print(first_order_elements[0].calculate_price())
+    print(TaxCalculator.tax_for_order_element(first_order_elements[0]))
 
 
-    first_order = Order(client_first_name="Kuba", client_last_name="Kowalski", order_elements=first_order_elements)
-    second_order = Order(client_first_name="Kuba", client_last_name="Kowalski", order_elements=second_order_elements)
-    # second_order.client_last_name = "Lewandowski"
-
-    second_order.add_new_product(other_cookie, 5)
-
-    print(second_order)
 
 if __name__ == '__main__':
     run_homework()
